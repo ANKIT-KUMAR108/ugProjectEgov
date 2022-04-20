@@ -1,5 +1,6 @@
 
 import { useState } from "react";
+import axios from 'axios';
 
 
 
@@ -11,30 +12,17 @@ const Register = () => {
   const handleEmail = (e) => setUserName(e.target.value);
   const handlePassword = (e) => setPassword(e.target.value);
 
-
-
-  const handleSubmit = async () => {
-    const data = {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const userData = {
       username: username,
-      password: password
-    }
-    console.log(data);
-    const response = await fetch('http://localhost:8000/register', {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*'
-      },
-      body: JSON.stringify(data)
+      password:password
+    };
+    axios.post("http://localhost:4000/register", userData).then((response) => {
+      console.log(response.status);
+      console.log(response.data.token);
     });
-    console.log("response: ", response.json());
-    return response;
-  }
-
-
-
-
+  };
 
 
   return (
@@ -48,12 +36,12 @@ const Register = () => {
             </div>
             <div className="row">
               <div className="input registerForm">
-                <input type="text" className="form-control bg-input" placeholder="Email id.." onChange={handleEmail} value={username} />
+                <input type="text" name="username" className="form-control bg-input" placeholder="Email id.." onChange={handleEmail} value={username} />
               </div>
             </div>
             <div className="row">
               <div className="input registerForm">
-                <input type="password" className="form-control bg-input" placeholder="Password" onChange={handlePassword} value={password} />
+                <input type="password" name="password" className="form-control bg-input" placeholder="Password" onChange={handlePassword} value={password} />
               </div>
             </div>
             <div className="row login">
